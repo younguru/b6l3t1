@@ -1,41 +1,41 @@
 package ru.netology;
 
 public class UselessBox {
-    private final int TURNCOUNT;
-    private final int TURNTIMEOUT;
-    private final int REACTIONTIMEOUT;
+    private final int TURN_COUNT;
+    private final int TURN_TIMEOUT;
+    private final int REACTION_TIMEOUT;
     private volatile boolean tumbler;
 
-    public UselessBox(int TURNCOUNT, int TURNTIMEOUT, int REACTIONTIMEOUT) {
-        this.TURNCOUNT = TURNCOUNT;
-        this.TURNTIMEOUT = TURNTIMEOUT;
-        this.REACTIONTIMEOUT = REACTIONTIMEOUT;
+    public UselessBox(int turnCount, int turnTimeout, int reactionTimeout) {
+        this.TURN_COUNT = turnCount;
+        this.TURN_TIMEOUT = turnTimeout;
+        this.REACTION_TIMEOUT = reactionTimeout;
         this.tumbler = false;
     }
 
-    public synchronized void toy() {
+    public void toy() {
         while (!Thread.currentThread().isInterrupted()) {
             try {
                 if (tumbler) {
                     System.out.println("Выключаю тумблер оО");
                     tumbler = false;
                 }
-                wait(REACTIONTIMEOUT);
+                Thread.sleep(REACTION_TIMEOUT);
             } catch (InterruptedException e) {
                 return;
             }
         }
     }
 
-    public synchronized void turn() {
+    public void turn() {
         try {
-            for (int i = 0; i < TURNCOUNT; i++) {
+            for (int i = 0; i < TURN_COUNT; i++) {
                 while (tumbler) {
-                    wait(REACTIONTIMEOUT);
+                    Thread.sleep(REACTION_TIMEOUT);
                 }
                 System.out.println("Включаю тумблер!");
                 tumbler = true;
-                wait(TURNTIMEOUT);
+                Thread.sleep(TURN_TIMEOUT);
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
